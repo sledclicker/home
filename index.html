@@ -6,7 +6,19 @@
     <title>Sled Clicker</title>
     <style>
         body { font-family: Arial, sans-serif; text-align: center; }
-        #sled { cursor: pointer; width: 150px; }
+        #sled { 
+            cursor: pointer; 
+            width: 150px; 
+            animation: spin 5s linear infinite; /* Initial spin animation */
+        }
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
         #shop { margin-top: 20px; }
         button { margin: 5px; }
     </style>
@@ -42,6 +54,7 @@
         let upgradesBought = Array(9).fill(false);
         let upgradeCosts = [10, 50, 100, 200, 500, 1000, 2000, 5000, 10000];
         let autoClicksPerSecond = 0;
+        let spinSpeed = 5; // Initial spin speed (5 seconds for one rotation)
 
         document.getElementById('sled').addEventListener('click', function() {
             clicks++;
@@ -54,15 +67,18 @@
                 clicks -= cost;
                 upgradesBought[upgrade - 1] = true;
                 autoClicksPerSecond += autoClickIncrease;
+                spinSpeed = Math.max(1, spinSpeed - 0.5); // Decrease time to rotate (spin faster)
                 document.getElementById('upgrade' + upgrade).disabled = true;
                 alert('Upgrade purchased! Now generating ' + autoClicksPerSecond + ' clicks per second.');
                 updateButtons(); // Update button states
+                updateSpinSpeed(); // Update sled spin speed
             } else if (clicks >= cost && upgradesBought[upgrade - 1]) {
                 // Allow users to buy again if they can afford it
                 clicks -= cost;
                 autoClicksPerSecond += autoClickIncrease;
                 alert('Upgrade purchased again! Now generating ' + autoClicksPerSecond + ' clicks per second.');
                 updateButtons(); // Update button states
+                updateSpinSpeed(); // Update sled spin speed
             }
             document.getElementById('clicks').innerText = clicks;
         }
@@ -79,6 +95,10 @@
                     button.disabled = true;
                 }
             }
+        }
+
+        function updateSpinSpeed() {
+            document.getElementById('sled').style.animation = `spin ${spinSpeed}s linear infinite`;
         }
 
         let colors = ["red", "orange", "yellow", "green", "blue", "indigo", "violet"];
