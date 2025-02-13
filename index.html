@@ -49,16 +49,16 @@
         });
 
         function buyUpgrade(upgrade, cost, autoClickIncrease) {
-            if (clicks >= cost && !upgradesBought[upgrade - 1]) {
-                clicks -= cost;
-                upgradesBought[upgrade - 1] = true;
-                autoClicksPerSecond += autoClickIncrease;
-                document.getElementById('upgrade' + upgrade).disabled = true;
-                alert('Upgrade purchased! Now generating ' + autoClicksPerSecond + ' clicks per second.');
-            }
-            document.getElementById('clicks').innerText = clicks;
-            updateButtons();
-        }
+    if (clicks >= cost && !upgradesBought[upgrade - 1]) {
+        clicks -= cost;
+        upgradesBought[upgrade - 1] = true;
+        autoClicksPerSecond += autoClickIncrease;
+        document.getElementById('upgrade' + upgrade).disabled = true;
+        alert('Upgrade purchased! Now generating ' + autoClicksPerSecond + ' clicks per second.');
+        updateButtons(); // Ensure buttons are updated immediately
+    }
+    document.getElementById('clicks').innerText = clicks;
+}
 
         function updateButtons() {
             for (let i = 0; i < upgradeCosts.length; i++) {
