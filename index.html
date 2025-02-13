@@ -17,10 +17,7 @@
         }
         #shop { margin-top: 20px; }
         button { margin: 5px; }
-html
-        {
-            background-color:white;
-        }
+
         /* Particle Styles */
         .particle {
             position: absolute;
@@ -35,6 +32,28 @@ html
         @keyframes particleMovement {
             to {
                 transform: translate(var(--x), var(--y));
+                opacity: 0;
+            }
+        }
+
+        /* Snowflake Styles */
+        .snowflake {
+            position: absolute;
+            background-color: white;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            opacity: 0.8;
+            animation: snowFall 5s linear infinite;
+        }
+
+        @keyframes snowFall {
+            0% {
+                transform: translateY(-100px);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh);
                 opacity: 0;
             }
         }
@@ -201,8 +220,33 @@ html
             document.body.style.backgroundSize = "cover";
             document.body.style.backgroundPosition = "center";
         }
+
+        // Snowflake generation every 10 seconds
+        setInterval(generateSnowflakes, 10000);
+
+        function generateSnowflakes() {
+            const snowflakeCount = 30; // Number of snowflakes per interval
+
+            for (let i = 0; i < snowflakeCount; i++) {
+                const snowflake = document.createElement('div');
+                snowflake.classList.add('snowflake');
+                document.body.appendChild(snowflake);
+
+                // Randomize the position of the snowflake
+                const xPos = Math.random() * window.innerWidth;
+                const size = Math.random() * 5 + 5; // Snowflake size between 5px and 10px
+                snowflake.style.left = `${xPos}px`;
+                snowflake.style.width = `${size}px`;
+                snowflake.style.height = `${size}px`;
+
+                // Snowflakes will fall at different speeds
+                snowflake.style.animationDuration = `${Math.random() * 5 + 5}s`; // Random duration between 5 and 10 seconds
+
+                // Remove snowflake after animation
+                setTimeout(() => {
+                    snowflake.remove();
+                }, 10000);
+            }
+        }
     </script>
-    <footer>
-        <caption>Nice game! Owned by Smartschool <a href="credits.html">View Credits</a></caption>
-    </footer>
 </html>
