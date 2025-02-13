@@ -18,15 +18,15 @@
     
     <div id="shop">
         <h2>Upgrades</h2>
-        <button id="upgrade1" onclick="buyUpgrade(1, 10, 0.1),stringbanner()" disabled title="Buy this upgrade when you have enough clicks to find out what it is!">Stringy Banner (Cost: 10)</button>
-        <button id="upgrade2" onclick="buyUpgrade(2, 50, 3), steeringwheel()" disabled title="Buy this upgrade when you have enough clicks to find out what it is!">Steering Wheel (Cost: 50)</button>
-        <button id="upgrade3" onclick="buyUpgrade(3, 100, 8), activateRainbowCursor()" disabled>Rainbow Clicker (Cost: 100)</button>
-        <button id="upgrade4" onclick="buyUpgrade(4, 200, 20),reinforcedsteel()" disabled title="Buy this upgrade when you have enough clicks to find out what it is!">Reinforced Steel (Cost: 200)</button>
-        <button id="upgrade5" onclick="buyUpgrade(5, 500, 40),ProfessionalSledder()" disabled title="Buy this upgrade when you have enough clicks to find out what it is!">Professional Sledder (<i>Maxxine Agaitor, 7yrs old</i>) (Cost: 500)</button>
-        <button id="upgrade6" onclick="buyUpgrade(6, 1000, 80), playMusic()" disabled title="Buy this upgrade when you have enough clicks to find out what it is!">Tunes (Cost: 1000)</button>
-        <button id="upgrade7" onclick="buyUpgrade(7, 2000, 100)" disabled title="Buy this upgrade when you have enough clicks to find out what it is!">Hacker (Cost: 2000)</button>
-        <button id="upgrade8" onclick="buyUpgrade(8, 5000, 120), money()" disabled title="Buy this upgrade when you have enough clicks to find out what it is!">jUsT gImMe My MoNeY!1! (Cost: 5000)</button>
-        <button id="upgrade9" onclick="buyUpgrade(9, 10000, 200), santa()" disabled title="Buy this upgrade when you have enough clicks to find out what it is!">Santa. (Cost: 10000)</button>
+        <button id="upgrade1" onclick="buyUpgrade(1, 10, 0.1); stringbanner()" disabled>Stringy Banner (Cost: 10)</button>
+        <button id="upgrade2" onclick="buyUpgrade(2, 50, 3); steeringwheel()" disabled>Steering Wheel (Cost: 50)</button>
+        <button id="upgrade3" onclick="buyUpgrade(3, 100, 8); activateRainbowCursor()" disabled>Rainbow Clicker (Cost: 100)</button>
+        <button id="upgrade4" onclick="buyUpgrade(4, 200, 20); reinforcedsteel()" disabled>Reinforced Steel (Cost: 200)</button>
+        <button id="upgrade5" onclick="buyUpgrade(5, 500, 40); ProfessionalSledder()" disabled>Professional Sledder (Cost: 500)</button>
+        <button id="upgrade6" onclick="buyUpgrade(6, 1000, 80); playMusic()" disabled>Tunes (Cost: 1000)</button>
+        <button id="upgrade7" onclick="buyUpgrade(7, 2000, 100); hacker()" disabled>Hacker (Cost: 2000)</button>
+        <button id="upgrade8" onclick="buyUpgrade(8, 5000, 120); money()" disabled>jUsT gImMe My MoNeY!1! (Cost: 5000)</button>
+        <button id="upgrade9" onclick="buyUpgrade(9, 10000, 200); santa()" disabled>Santa (Cost: 10000)</button>
     </div>
     <audio id="music" src="https://spinningrat.online/assets/tunes/tunes.ogg" autoplay loop></audio>
 
@@ -36,6 +36,7 @@
             audio.play();
         }
     </script>
+
     <script>
         let clicks = 0;
         let upgradesBought = Array(9).fill(false);
@@ -49,27 +50,37 @@
         });
 
         function buyUpgrade(upgrade, cost, autoClickIncrease) {
-    if (clicks >= cost && !upgradesBought[upgrade - 1]) {
-        clicks -= cost;
-        upgradesBought[upgrade - 1] = true;
-        autoClicksPerSecond += autoClickIncrease;
-        document.getElementById('upgrade' + upgrade).disabled = true;
-        alert('Upgrade purchased! Now generating ' + autoClicksPerSecond + ' clicks per second.');
-        updateButtons(); // Ensure buttons are updated immediately
-    }
-    document.getElementById('clicks').innerText = clicks;
-}
+            if (clicks >= cost && !upgradesBought[upgrade - 1]) {
+                clicks -= cost;
+                upgradesBought[upgrade - 1] = true;
+                autoClicksPerSecond += autoClickIncrease;
+                document.getElementById('upgrade' + upgrade).disabled = true;
+                alert('Upgrade purchased! Now generating ' + autoClicksPerSecond + ' clicks per second.');
+                updateButtons(); // Update button states
+            } else if (clicks >= cost && upgradesBought[upgrade - 1]) {
+                // Allow users to buy again if they can afford it
+                clicks -= cost;
+                autoClicksPerSecond += autoClickIncrease;
+                alert('Upgrade purchased again! Now generating ' + autoClicksPerSecond + ' clicks per second.');
+                updateButtons(); // Update button states
+            }
+            document.getElementById('clicks').innerText = clicks;
+        }
 
         function updateButtons() {
             for (let i = 0; i < upgradeCosts.length; i++) {
                 let button = document.getElementById('upgrade' + (i + 1));
                 if (clicks >= upgradeCosts[i] && !upgradesBought[i]) {
                     button.disabled = false;
+                } else if (clicks >= upgradeCosts[i] && upgradesBought[i]) {
+                    // Allow purchasing again
+                    button.disabled = false;
                 } else {
                     button.disabled = true;
                 }
             }
         }
+
         let colors = ["red", "orange", "yellow", "green", "blue", "indigo", "violet"];
         let index = 0;
 
@@ -79,39 +90,46 @@
                 index = (index + 1) % colors.length;
             }, 100); // Change color every 100ms
         }
+
         function autoClick() {
             clicks += autoClicksPerSecond;
             document.getElementById('clicks').innerText = Math.floor(clicks);
             updateButtons();
         }
+
         setInterval(autoClick, 1000);
-        //Backgrounds
+
+        // Background functions for upgrades
         function stringbanner() {
             document.body.style.backgroundImage = "url('https://images.thdstatic.com/productImages/ce381c6d-b778-480d-8dcd-6baf82b4f645/svn/novelty-place-house-flags-np-pennantbanner-75pcs-2pc-1d_600.jpg')";
             document.body.style.backgroundSize = "cover";
             document.body.style.backgroundPosition = "center";
-
         }
+
         function steeringwheel() {
             document.body.style.backgroundImage = "url('https://media.tenor.com/7Cv0ZYqWR9gAAAAM/gta-v-flip.gif')";
             document.body.style.backgroundSize = "cover";
             document.body.style.backgroundPosition = "center";
         }
+
         function reinforcedsteel() {
             document.body.style.backgroundImage = "url('https://i.pinimg.com/originals/4b/cb/35/4bcb35a715c7b0913748a7b71251722a.gif')";
             document.body.style.backgroundSize = "cover";
             document.body.style.backgroundPosition = "center";
         }
+
         function ProfessionalSledder() {
             document.body.style.backgroundImage = "url('https://media.tenor.com/rEcB3Dw7LTcAAAAM/sled-fail.gif')";
             document.body.style.backgroundSize = "cover";
             document.body.style.backgroundPosition = "center";
         }
+
         function money() {
             document.body.style.backgroundImage = "url('https://i.giphy.com/14vTnFcC3Oom4M.webp')";
             document.body.style.backgroundSize = "cover";
             document.body.style.backgroundPosition = "center";
         }
+
         function santa() {
             document.body.style.backgroundImage = "url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQdxxjg8Uth5MvH7mtdjod0BgnWtAWGuAkjgIVlm5nv723L4NE0YeZzFZYeM1wc_ZwUskY&usqp=CAU')";
             document.body.style.backgroundSize = "cover";
@@ -120,4 +138,3 @@
     </script>
 </body>
 </html>
-
