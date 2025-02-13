@@ -5,22 +5,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sled Clicker</title>
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; }
+        body { font-family: Arial, sans-serif; text-align: center; position: relative; }
         #sled { 
             cursor: pointer; 
             width: 150px; 
             animation: spin 5s linear infinite; /* Initial spin animation */
+            position: relative; /* Needed for positioning particles */
         }
         @keyframes spin {
-            from {
-                transform: rotate(0deg);
-            }
-            to {
-                transform: rotate(360deg);
-            }
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
         #shop { margin-top: 20px; }
         button { margin: 5px; }
+
+        /* Particle Styles */
+        .particle {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: white;
+            border-radius: 50%;
+            opacity: 1;
+            animation: particleMovement 0.5s ease-out forwards;
+        }
+
+        @keyframes particleMovement {
+            to {
+                transform: translate(var(--x), var(--y));
+                opacity: 0;
+            }
+        }
     </style>
 </head>
 <body>
@@ -56,11 +71,42 @@
         let autoClicksPerSecond = 0;
         let spinSpeed = 5; // Initial spin speed (5 seconds for one rotation)
 
-        document.getElementById('sled').addEventListener('click', function() {
+        document.getElementById('sled').addEventListener('click', function(event) {
             clicks++;
             document.getElementById('clicks').innerText = clicks;
             updateButtons();
+            generateParticles(event.clientX, event.clientY); // Generate particles at click position
         });
+
+        function generateParticles(x, y) {
+            const particleCount = 10; // Number of particles per click
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                document.body.appendChild(particle);
+
+                // Set the starting position to the sled's location
+                particle.style.left = `${x - 5}px`;
+                particle.style.top = `${y - 5}px`;
+
+                // Generate random movement for the particles
+                const angle = Math.random() * 2 * Math.PI;
+                const distance = Math.random() * 100 + 50; // Random distance to move
+
+                const deltaX = Math.cos(angle) * distance;
+                const deltaY = Math.sin(angle) * distance;
+
+                // Set the final position using CSS custom properties (for animation)
+                particle.style.setProperty('--x', `${deltaX}px`);
+                particle.style.setProperty('--y', `${deltaY}px`);
+
+                // Remove the particle after animation
+                setTimeout(() => {
+                    particle.remove();
+                }, 500); // Match the animation duration
+            }
+        }
 
         function buyUpgrade(upgrade, cost, autoClickIncrease) {
             if (clicks >= cost && !upgradesBought[upgrade - 1]) {
