@@ -1,1 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sled Clicker</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        #sled { cursor: pointer; width: 150px; }
+        #shop { margin-top: 20px; }
+        button { margin: 5px; }
+    </style>
+</head>
+<body>
+    <h1>Sled Clicker</h1>
+    <p>Clicks: <span id="clicks">0</span></p>
+    <img id="sled" src="https://via.placeholder.com/150" alt="Sled">
+    
+    <div id="shop">
+        <h2>Upgrades</h2>
+        <button id="upgrade1" onclick="buyUpgrade(1, 10, 0.1),stringbanner()" disabled title="Buy this upgrade when you have enough clicks to find out what it is!">Stringy Banner (Cost: 10)</button>
+        <button id="upgrade2" onclick="buyUpgrade(2, 50, 3), steeringwheel()" disabled title="Buy this upgrade when you have enough clicks to find out what it is!">Steering Wheel (Cost: 50)</button>
+        <button id="upgrade3" onclick="buyUpgrade(3, 100, 8), activateRainbowCursor()" disabled>Rainbow Clicker (Cost: 100)</button>
+        <button id="upgrade4" onclick="buyUpgrade(4, 200, 20),reinforcedsteel()" disabled title="Buy this upgrade when you have enough clicks to find out what it is!">Reinforced Steel (Cost: 200)</button>
+        <button id="upgrade5" onclick="buyUpgrade(5, 500, 40),ProfessionalSledder()" disabled title="Buy this upgrade when you have enough clicks to find out what it is!">Professional Sledder (<i>Maxxine Agaitor, 7yrs old</i>) (Cost: 500)</button>
+        <button id="upgrade6" onclick="buyUpgrade(6, 1000, 80), playMusic()" disabled title="Buy this upgrade when you have enough clicks to find out what it is!">Tunes (Cost: 1000)</button>
+        <button id="upgrade7" onclick="buyUpgrade(7, 2000, 100)" disabled title="Buy this upgrade when you have enough clicks to find out what it is!">Hacker (Cost: 2000)</button>
+        <button id="upgrade8" onclick="buyUpgrade(8, 5000, 120), money()" disabled title="Buy this upgrade when you have enough clicks to find out what it is!">jUsT gImMe My MoNeY!1! (Cost: 5000)</button>
+        <button id="upgrade9" onclick="buyUpgrade(9, 10000, 200), santa()" disabled title="Buy this upgrade when you have enough clicks to find out what it is!">Santa. (Cost: 10000)</button>
+    </div>
+    <audio id="music" src="https://spinningrat.online/assets/tunes/tunes.ogg" autoplay loop></audio>
+
+    <script>
+        function playMusic() {
+            let audio = document.getElementById("music");
+            audio.play();
+        }
+    </script>
+    <script>
+        let clicks = 0;
+        let upgradesBought = Array(9).fill(false);
+        let upgradeCosts = [10, 50, 100, 200, 500, 1000, 2000, 5000, 10000];
+        let autoClicksPerSecond = 0;
+
+        document.getElementById('sled').addEventListener('click', function() {
+            clicks++;
+            document.getElementById('clicks').innerText = clicks;
+            updateButtons();
+        });
+
+        function buyUpgrade(upgrade, cost, autoClickIncrease) {
+            if (clicks >= cost && !upgradesBought[upgrade - 1]) {
+                clicks -= cost;
+                upgradesBought[upgrade - 1] = true;
+                autoClicksPerSecond += autoClickIncrease;
+                document.getElementById('upgrade' + upgrade).disabled = true;
+                alert('Upgrade purchased! Now generating ' + autoClicksPerSecond + ' clicks per second.');
+            }
+            document.getElementById('clicks').innerText = clicks;
+            updateButtons();
+        }
+
+        function updateButtons() {
+            for (let i = 0; i < upgradeCosts.length; i++) {
+                let button = document.getElementById('upgrade' + (i + 1));
+                if (clicks >= upgradeCosts[i] && !upgradesBought[i]) {
+                    button.disabled = false;
+                } else {
+                    button.disabled = true;
+                }
+            }
+        }
+        let colors = ["red", "orange", "yellow", "green", "blue", "indigo", "violet"];
+        let index = 0;
+
+        function activateRainbowCursor() {
+            setInterval(() => {
+                document.body.style.cursor = `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"><circle cx="16" cy="16" r="8" fill="${colors[index]}"/></svg>') 16 16, auto`;
+                index = (index + 1) % colors.length;
+            }, 100); // Change color every 100ms
+        }
+        function autoClick() {
+            clicks += autoClicksPerSecond;
+            document.getElementById('clicks').innerText = Math.floor(clicks);
+            updateButtons();
+        }
+        setInterval(autoClick, 1000);
+        //Backgrounds
+        function stringbanner() {
+            document.body.style.backgroundImage = "url('stringybanner.png')";
+            document.body.style.backgroundSize = "cover";
+            document.body.style.backgroundPosition = "center";
+
+        }
+        function steeringwheel() {
+            document.body.style.backgroundImage = "url('GTA.gif')";
+            document.body.style.backgroundSize = "cover";
+            document.body.style.backgroundPosition = "center";
+        }
+        function reinforcedsteel() {
+            document.body.style.backgroundImage = "url('steel.gif')";
+            document.body.style.backgroundSize = "cover";
+            document.body.style.backgroundPosition = "center";
+        }
+        function ProfessionalSledder() {
+            document.body.style.backgroundImage = "url('sledder.jpg')";
+            document.body.style.backgroundSize = "cover";
+            document.body.style.backgroundPosition = "center";
+        }
+        function money() {
+            document.body.style.backgroundImage = "url('money.gif')";
+            document.body.style.backgroundSize = "cover";
+            document.body.style.backgroundPosition = "center";
+        }
+        function santa() {
+            document.body.style.backgroundImage = "url('caseoh.gif')";
+            document.body.style.backgroundSize = "cover";
+            document.body.style.backgroundPosition = "center";
+        }
+    </script>
+</body>
+</html>
 
